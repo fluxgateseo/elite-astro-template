@@ -2,6 +2,7 @@
 import config from "../../site.config";
 import Fullbleed from "./Fullbleed.astro";
 import Mosaic from "./Mosaic.astro";
+import Split from "./Split.astro";
 import LegacyHero from "../Hero.astro";
 
 interface Props {
@@ -14,8 +15,10 @@ interface Props {
 
 const props = Astro.props;
 const variant = config.layout?.hero ?? "hero-fullbleed";
+const READY = ["hero-fullbleed","hero-mosaic","hero-split"];
 ---
 
 {variant === "hero-fullbleed" && <Fullbleed {...props} />}
 {variant === "hero-mosaic" && <Mosaic {...props} />}
-{!["hero-fullbleed","hero-mosaic"].includes(variant) && <LegacyHero {...props} image={config.layout?.heroAssets?.image ? { src: config.layout.heroAssets.image, alt: props.title } : undefined} />}
+{variant === "hero-split" && <Split {...props} />}
+{!READY.includes(variant) && <LegacyHero {...props} image={config.layout?.heroAssets?.image ? { src: config.layout.heroAssets.image, alt: props.title } : undefined} />}

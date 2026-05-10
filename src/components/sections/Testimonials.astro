@@ -1,0 +1,55 @@
+---
+import config from "../../site.config";
+
+interface Testimonial { quote: string; author: string; role?: string }
+
+const industryTestimonials: Record<string, Testimonial[]> = {
+  ristorazione: [
+    { quote: "Una delle migliori esperienze gastronomiche dell'anno. Ogni piatto racconta una storia.", author: "Marco T.", role: "Cliente abituale" },
+    { quote: "Atmosfera unica, servizio impeccabile. Tornerò sicuramente per il prossimo anniversario.", author: "Giulia M.", role: "Su Tripadvisor" },
+    { quote: "La cucina rispetta la tradizione ma con un tocco contemporaneo che fa la differenza.", author: "Luca R.", role: "Su Google Reviews" },
+  ],
+  beauty: [
+    { quote: "Professionalità e cura del dettaglio. Mi sento sempre a casa.", author: "Anna B.", role: "Cliente abituale" },
+    { quote: "Risultati eccellenti e ambiente rilassante. Lo consiglio a chiunque.", author: "Sara L.", role: "Su Google Reviews" },
+    { quote: "Personale preparato e gentile, prodotti di alta qualità.", author: "Martina F.", role: "Su Treatwell" },
+  ],
+  default: [
+    { quote: "Servizio di altissimo livello, sempre disponibili e attenti ai dettagli.", author: "Cliente verificato", role: "Recensione recente" },
+    { quote: "Esperienza professionale e curata. Risultati superiori alle aspettative.", author: "Cliente verificato", role: "Recensione recente" },
+    { quote: "Consiglio vivamente. Hanno saputo capire esattamente quello di cui avevo bisogno.", author: "Cliente verificato", role: "Recensione recente" },
+  ],
+};
+
+const testimonials = industryTestimonials[config.industry] ?? industryTestimonials.default;
+---
+
+<section class="py-24" style="background:var(--color-bg)">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-16">
+      <p class="text-xs font-medium uppercase tracking-widest mb-3" style="color:var(--color-accent)">Cosa dicono di noi</p>
+      <h2
+        class="font-bold text-3xl md:text-4xl"
+        style="font-family:var(--font-display);color:var(--color-fg)"
+      >
+        Testimonianze
+      </h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">
+      {testimonials.map((t) => (
+        <figure class="flex flex-col h-full">
+          <blockquote
+            class="text-lg leading-relaxed mb-6 relative pl-6"
+            style="color:var(--color-fg);border-left:3px solid var(--color-accent);font-family:var(--font-display);font-style:italic"
+          >
+            &ldquo;{t.quote}&rdquo;
+          </blockquote>
+          <figcaption class="text-sm mt-auto pl-6">
+            <span class="font-semibold block" style="color:var(--color-fg)">{t.author}</span>
+            {t.role && <span style="color:var(--color-muted)">{t.role}</span>}
+          </figcaption>
+        </figure>
+      ))}
+    </div>
+  </div>
+</section>

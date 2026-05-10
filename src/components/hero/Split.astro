@@ -1,0 +1,77 @@
+---
+import config from "../../site.config";
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  lead?: string;
+  ctaPrimary?: { label: string; href: string };
+  ctaSecondary?: { label: string; href: string };
+}
+
+const { title, subtitle, lead, ctaPrimary, ctaSecondary } = Astro.props;
+const heroImg = config.layout?.heroAssets?.image;
+---
+
+<section class="relative overflow-hidden">
+  <div class="grid grid-cols-1 lg:grid-cols-2 min-h-[80vh]">
+    <div class="flex items-center px-6 sm:px-10 lg:px-16 py-16 lg:py-24" style="background:var(--color-bg)">
+      <div class="max-w-xl">
+        {subtitle && (
+          <p
+            class="text-xs font-medium uppercase tracking-[0.3em] mb-6"
+            style="color:var(--color-accent)"
+          >
+            {subtitle}
+          </p>
+        )}
+        <h1
+          class="font-bold leading-[1.05] mb-8"
+          style="font-family:var(--font-display);font-size:clamp(2.5rem,5vw,4.5rem);color:var(--color-fg)"
+        >
+          {title}
+        </h1>
+        {lead && (
+          <p class="text-base md:text-lg leading-relaxed mb-10" style="color:var(--color-muted)">
+            {lead}
+          </p>
+        )}
+        {(ctaPrimary || ctaSecondary) && (
+          <div class="flex flex-wrap gap-4">
+            {ctaPrimary && (
+              <a
+                href={ctaPrimary.href}
+                class="inline-block px-8 py-3.5 text-sm font-semibold uppercase tracking-wider no-underline"
+                style="background:var(--color-accent);color:var(--color-bg)"
+              >
+                {ctaPrimary.label}
+              </a>
+            )}
+            {ctaSecondary && (
+              <a
+                href={ctaSecondary.href}
+                class="inline-block px-8 py-3.5 text-sm font-semibold uppercase tracking-wider no-underline border-2"
+                style="color:var(--color-fg);border-color:var(--color-fg)"
+              >
+                {ctaSecondary.label}
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+    </div>
+    <div class="relative min-h-[50vh] lg:min-h-full">
+      {heroImg ? (
+        <img
+          src={heroImg}
+          alt={`${config.name} — ${subtitle ?? "hero"}`}
+          class="absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+          fetchpriority="high"
+        />
+      ) : (
+        <div class="absolute inset-0" style="background:var(--color-divider)"></div>
+      )}
+    </div>
+  </div>
+</section>

@@ -90,6 +90,39 @@ const magazineList = rest.slice(4);
           </div>
         )}
       </>
+    ) : layout === "cat-list-thumb" ? (
+      <div class="space-y-8 max-w-4xl">
+        {sorted.map((a) => (
+          <a
+            href={`/blog/${a.data.slug ?? a.id.replace(/\.md$/, "")}/`}
+            class="flex flex-col sm:flex-row gap-6 group no-underline pb-8 border-b"
+            style="color:var(--color-fg);border-color:var(--color-divider)"
+          >
+            {a.data.hero && (
+              <div class="sm:w-56 shrink-0 aspect-[4/3] overflow-hidden">
+                <img
+                  src={a.data.hero}
+                  alt={a.data.title}
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
+                />
+              </div>
+            )}
+            <div class="flex-1">
+              {a.data.category && (
+                <p class="text-xs uppercase tracking-wider mb-2" style="color:var(--color-accent)">{a.data.category}</p>
+              )}
+              <h3 class="font-bold text-xl md:text-2xl mb-3 leading-tight" style="font-family:var(--font-display)">{a.data.title}</h3>
+              {a.data.excerpt && (
+                <p class="text-sm md:text-base leading-relaxed" style="color:var(--color-muted)">{a.data.excerpt}</p>
+              )}
+              <p class="text-xs mt-3" style="color:var(--color-muted)">
+                {new Date(a.data.date).toLocaleDateString("it-IT", { year: "numeric", month: "long", day: "numeric" })}
+              </p>
+            </div>
+          </a>
+        ))}
+      </div>
     ) : (
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {sorted.map((a, i) => (

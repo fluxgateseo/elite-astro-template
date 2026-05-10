@@ -1,0 +1,52 @@
+---
+import config from "../../site.config";
+
+interface StatItem { value: string; label: string }
+
+const industryStats: Record<string, StatItem[]> = {
+  ristorazione: [
+    { value: "★ 4.7", label: "Recensioni clienti" },
+    { value: "20+", label: "Anni di tradizione" },
+    { value: "100%", label: "Materie prime selezionate" },
+    { value: "7/7", label: "Aperti tutta la settimana" },
+  ],
+  beauty: [
+    { value: "★ 4.9", label: "Recensioni clienti" },
+    { value: "10+", label: "Anni di esperienza" },
+    { value: "100%", label: "Prodotti professionali" },
+    { value: "6/7", label: "Giorni a settimana" },
+  ],
+  servizi: [
+    { value: "★ 4.8", label: "Recensioni clienti" },
+    { value: "15+", label: "Anni di attività" },
+    { value: "200+", label: "Progetti completati" },
+    { value: "24h", label: "Tempo di risposta" },
+  ],
+  default: [
+    { value: "★ 4.8", label: "Recensioni clienti" },
+    { value: "10+", label: "Anni di esperienza" },
+    { value: "100%", label: "Qualità garantita" },
+    { value: "7/7", label: "Sempre disponibili" },
+  ],
+};
+
+const stats = industryStats[config.industry] ?? industryStats.default;
+---
+
+<section class="py-20" style="background:var(--color-fg);color:var(--color-bg)">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-6 text-center">
+      {stats.map((s) => (
+        <div>
+          <div
+            class="font-bold mb-3"
+            style="font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);color:var(--color-accent)"
+          >
+            {s.value}
+          </div>
+          <div class="text-xs md:text-sm uppercase tracking-widest opacity-80">{s.label}</div>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

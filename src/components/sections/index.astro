@@ -6,6 +6,8 @@ import Story from "./Story.astro";
 import MapHours from "./MapHours.astro";
 import CtaBanner from "./CtaBanner.astro";
 import BlogFeed from "./BlogFeed.astro";
+import Stats from "./Stats.astro";
+import Testimonials from "./Testimonials.astro";
 
 const sections = config.layout?.sections ?? [];
 ---
@@ -17,5 +19,7 @@ const sections = config.layout?.sections ?? [];
   if (id === "section-map-hours") return <MapHours />;
   if (id === "section-cta-banner") return <CtaBanner />;
   if (id === "section-blog-feed") return <BlogFeed />;
+  if (id === "section-stats") return <Stats />;
+  if (id === "section-testimonials") return <Testimonials />;
   return null;
 })}
