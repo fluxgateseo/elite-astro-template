@@ -1,0 +1,21 @@
+---
+import config from "../../site.config";
+import FeaturedDishes from "./FeaturedDishes.astro";
+import PhotoMosaic from "./PhotoMosaic.astro";
+import Story from "./Story.astro";
+import MapHours from "./MapHours.astro";
+import CtaBanner from "./CtaBanner.astro";
+import BlogFeed from "./BlogFeed.astro";
+
+const sections = config.layout?.sections ?? [];
+---
+
+{sections.map((id) => {
+  if (id === "section-featured-dishes") return <FeaturedDishes />;
+  if (id === "section-photo-mosaic") return <PhotoMosaic />;
+  if (id === "section-story") return <Story />;
+  if (id === "section-map-hours") return <MapHours />;
+  if (id === "section-cta-banner") return <CtaBanner />;
+  if (id === "section-blog-feed") return <BlogFeed />;
+  return null;
+})}

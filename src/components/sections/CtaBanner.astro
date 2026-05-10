@@ -1,0 +1,29 @@
+---
+import config from "../../site.config";
+const ctaHref = config.pages.contatti ? "/contatti" : (config.pages.eventi ? "/eventi" : "/");
+const ctaLabel = config.industry === "ristorazione" ? "Prenota un tavolo" : "Contattaci";
+---
+
+<section
+  class="relative py-24 px-4 sm:px-6 lg:px-8 overflow-hidden"
+  style="background:var(--color-fg);color:var(--color-bg)"
+>
+  <div class="max-w-4xl mx-auto text-center relative z-10">
+    <h2
+      class="font-bold text-3xl md:text-5xl mb-6 leading-tight"
+      style="font-family:var(--font-display)"
+    >
+      Vivi l'esperienza {config.name}
+    </h2>
+    <p class="text-base md:text-lg mb-10 opacity-80 max-w-2xl mx-auto leading-relaxed">
+      {config.tagline || config.description.slice(0, 160)}
+    </p>
+    <a
+      href={ctaHref}
+      class="inline-block px-10 py-4 text-sm font-semibold uppercase tracking-widest no-underline"
+      style="background:var(--color-accent);color:var(--color-fg)"
+    >
+      {ctaLabel}
+    </a>
+  </div>
+</section>

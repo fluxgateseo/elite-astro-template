@@ -1,0 +1,21 @@
+---
+import config from "../../site.config";
+import Fullbleed from "./Fullbleed.astro";
+import Mosaic from "./Mosaic.astro";
+import LegacyHero from "../Hero.astro";
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  lead?: string;
+  ctaPrimary?: { label: string; href: string };
+  ctaSecondary?: { label: string; href: string };
+}
+
+const props = Astro.props;
+const variant = config.layout?.hero ?? "hero-fullbleed";
+---
+
+{variant === "hero-fullbleed" && <Fullbleed {...props} />}
+{variant === "hero-mosaic" && <Mosaic {...props} />}
+{!["hero-fullbleed","hero-mosaic"].includes(variant) && <LegacyHero {...props} image={config.layout?.heroAssets?.image ? { src: config.layout.heroAssets.image, alt: props.title } : undefined} />}

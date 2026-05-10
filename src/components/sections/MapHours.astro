@@ -1,0 +1,55 @@
+---
+import config from "../../site.config";
+const addr = config.address;
+const fullAddress = `${addr.street}, ${addr.postalCode ?? ""} ${addr.city}, ${addr.country}`.replace(/,\s*,/g, ",");
+const mapsUrl = `https://www.google.com/maps?q=${encodeURIComponent(fullAddress)}`;
+---
+
+<section class="py-20" style="background:var(--color-bg)">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-5 gap-10 items-start">
+    <div class="md:col-span-2">
+      <p class="text-xs font-medium uppercase tracking-widest mb-3" style="color:var(--color-accent)">Vieni a trovarci</p>
+      <h2
+        class="font-bold text-3xl md:text-4xl mb-8"
+        style="font-family:var(--font-display);color:var(--color-fg)"
+      >
+        Dove siamo
+      </h2>
+      <div class="space-y-5 text-sm" style="color:var(--color-fg)">
+        <div>
+          <p class="font-semibold mb-1 text-xs uppercase tracking-wider" style="color:var(--color-muted)">Indirizzo</p>
+          <p>{addr.street}</p>
+          <p>{addr.postalCode} {addr.city}, {addr.country}</p>
+        </div>
+        {config.phone && (
+          <div>
+            <p class="font-semibold mb-1 text-xs uppercase tracking-wider" style="color:var(--color-muted)">Telefono</p>
+            <a href={`tel:${config.phone}`} class="no-underline hover:underline" style="color:var(--color-fg)">{config.phone}</a>
+          </div>
+        )}
+        <div>
+          <p class="font-semibold mb-1 text-xs uppercase tracking-wider" style="color:var(--color-muted)">Email</p>
+          <a href={`mailto:${config.email}`} class="no-underline hover:underline" style="color:var(--color-fg)">{config.email}</a>
+        </div>
+        <a
+          href={mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block mt-4 px-6 py-2.5 text-sm font-semibold uppercase tracking-wider no-underline"
+          style="background:var(--color-accent);color:var(--color-bg)"
+        >
+          Apri su Google Maps
+        </a>
+      </div>
+    </div>
+    <div class="md:col-span-3 aspect-[4/3] overflow-hidden">
+      <iframe
+        src={`https://www.google.com/maps?q=${encodeURIComponent(fullAddress)}&output=embed`}
+        loading="lazy"
+        class="w-full h-full border-0"
+        title={`Mappa di ${config.name}`}
+        referrerpolicy="no-referrer-when-downgrade"
+      ></iframe>
+    </div>
+  </div>
+</section>

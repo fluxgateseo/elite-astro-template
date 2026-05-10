@@ -1,0 +1,62 @@
+---
+import config from "../../site.config";
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  lead?: string;
+  ctaPrimary?: { label: string; href: string };
+  ctaSecondary?: { label: string; href: string };
+}
+
+const { title, subtitle, lead, ctaPrimary, ctaSecondary } = Astro.props;
+const heroImg = config.layout?.heroAssets?.image ?? config.seo?.defaultOgImage ?? "";
+---
+
+<section class="relative min-h-[78vh] flex items-center overflow-hidden">
+  {heroImg && (
+    <img
+      src={heroImg}
+      alt={`${config.name} — ${subtitle ?? "hero"}`}
+      class="absolute inset-0 w-full h-full object-cover"
+      loading="eager"
+      fetchpriority="high"
+    />
+  )}
+  <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(0,0,0,0.35) 0%,rgba(0,0,0,0.75) 100%)"></div>
+  <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-white">
+    {subtitle && (
+      <p class="text-xs font-medium uppercase tracking-[0.3em] mb-8 opacity-90">{subtitle}</p>
+    )}
+    <h1
+      class="font-bold leading-[0.95] mb-8 max-w-4xl"
+      style="font-family:var(--font-display);font-size:clamp(2.75rem,8vw,6rem)"
+    >
+      {title}
+    </h1>
+    {lead && (
+      <p class="text-lg md:text-xl max-w-2xl leading-relaxed opacity-90 mb-10">{lead}</p>
+    )}
+    {(ctaPrimary || ctaSecondary) && (
+      <div class="flex flex-wrap gap-4">
+        {ctaPrimary && (
+          <a
+            href={ctaPrimary.href}
+            class="inline-block px-8 py-3.5 text-sm font-semibold uppercase tracking-wider no-underline"
+            style="background:var(--color-accent);color:var(--color-bg)"
+          >
+            {ctaPrimary.label}
+          </a>
+        )}
+        {ctaSecondary && (
+          <a
+            href={ctaSecondary.href}
+            class="inline-block px-8 py-3.5 text-sm font-semibold uppercase tracking-wider no-underline border-2 border-white/80 text-white"
+          >
+            {ctaSecondary.label}
+          </a>
+        )}
+      </div>
+    )}
+  </div>
+</section>

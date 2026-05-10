@@ -1,0 +1,54 @@
+---
+import config from "../../site.config";
+let images: { src: string; alt?: string }[] = [];
+try {
+  const data = (await import("../../data/gallery.json")).default as { src: string; alt?: string }[];
+  images = data.slice(0, 9);
+} catch {}
+const mosaic = config.layout?.heroAssets?.mosaic ?? [];
+if (images.length === 0 && mosaic.length > 0) {
+  images = mosaic.slice(0, 9).map((src) => ({ src }));
+}
+---
+
+{images.length >= 6 && (
+  <section class="py-20" style="background:var(--color-bg)">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="mb-12 text-center">
+        <p class="text-xs font-medium uppercase tracking-widest mb-3" style="color:var(--color-accent)">Galleria</p>
+        <h2
+          class="font-bold text-3xl md:text-4xl"
+          style="font-family:var(--font-display);color:var(--color-fg)"
+        >
+          Atmosfere e dettagli
+        </h2>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-2 md:gap-3">
+        {images.slice(0, 9).map((img, i) => (
+          <div
+            class="overflow-hidden"
+            style={`aspect-ratio: ${i === 0 || i === 4 ? "1/1" : "4/5"};`}
+          >
+            <img
+              src={img.src}
+              alt={img.alt ?? ""}
+              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+              loading="lazy"
+            />
+          </div>
+        ))}
+      </div>
+      {config.pages.galleria && (
+        <div class="text-center mt-10">
+          <a
+            href="/galleria"
+            class="inline-block text-sm font-medium uppercase tracking-wider no-underline"
+            style="color:var(--color-accent)"
+          >
+            Vedi tutta la galleria &rarr;
+          </a>
+        </div>
+      )}
+    </div>
+  </section>
+)}

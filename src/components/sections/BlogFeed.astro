@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import ArticleCard from "../ArticleCard.astro";
+import Section from "../Section.astro";
+import config from "../../site.config";
+
+if (!config.pages.blog) return null;
+
+const allArticoli = await getCollection("articoli");
+const sorted = allArticoli.sort(
+  (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
+);
+const featured = sorted.slice(0, 3);
+---
+
+{featured.length > 0 && (
+  <Section>
+    <div class="flex items-center justify-between mb-10">
+      <div>
+        <p class="text-xs font-medium uppercase tracking-widest mb-3" style="color:var(--color-accent)">Dal blog</p>
+        <h2
+          class="font-bold text-2xl md:text-3xl"
+          style="font-family:var(--font-display);color:var(--color-fg)"
+        >
+          Articoli recenti
+        </h2>
+      </div>
+      <a
+        href="/blog"
+        class="text-sm font-medium no-underline hover:underline shrink-0"
+        style="color:var(--color-accent)"
+      >
+        Tutti gli articoli &rarr;
+      </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {featured.map((a, i) => (
+        <ArticleCard
+          title={a.data.title}
+          slug={a.data.slug ?? a.id.replace(/\.md$/, "")}
+          date={a.data.date}
+          category={a.data.category}
+          excerpt={a.data.excerpt}
+          image={a.data.hero}
+          featured={i === 0}
+        />
+      ))}
+    </div>
+  </Section>
+)}

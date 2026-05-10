@@ -12,6 +12,11 @@ const allArticoli = await getCollection("articoli");
 const sorted = allArticoli.sort(
   (a, b) => new Date(b.data.date).getTime() - new Date(a.data.date).getTime()
 );
+
+const layout = config.layout?.categoryLayout ?? "cat-grid-cards";
+const [hero, ...rest] = sorted;
+const magazineSecondary = rest.slice(0, 4);
+const magazineList = rest.slice(4);
 ---
 <BaseLayout
   title="Blog"
@@ -19,12 +24,7 @@ const sorted = allArticoli.sort(
 >
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
     <div class="mb-12">
-      <p
-        class="text-xs font-medium uppercase tracking-widest mb-3"
-        style="color:var(--color-accent)"
-      >
-        Archivio
-      </p>
+      <p class="text-xs font-medium uppercase tracking-widest mb-3" style="color:var(--color-accent)">Archivio</p>
       <h1
         class="font-bold mb-4"
         style={`font-family:var(--font-display);font-size:clamp(2rem,5vw,3.5rem);color:var(--color-fg);line-height:1.1`}
@@ -36,7 +36,61 @@ const sorted = allArticoli.sort(
       </p>
     </div>
 
-    {sorted.length > 0 ? (
+    {sorted.length === 0 ? (
+      <p style="color:var(--color-muted)">
+        Nessun articolo pubblicato. Aggiungi file Markdown in <code>src/content/articoli/</code>.
+      </p>
+    ) : layout === "cat-magazine" && hero ? (
+      <>
+        <div class="mb-10">
+          <ArticleCard
+            title={hero.data.title}
+            slug={hero.data.slug ?? hero.id.replace(/\.md$/, "")}
+            date={hero.data.date}
+            category={hero.data.category}
+            excerpt={hero.data.excerpt}
+            image={hero.data.hero}
+            featured={true}
+          />
+        </div>
+        {magazineSecondary.length > 0 && (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+            {magazineSecondary.map((a) => (
+              <ArticleCard
+                title={a.data.title}
+                slug={a.data.slug ?? a.id.replace(/\.md$/, "")}
+                date={a.data.date}
+                category={a.data.category}
+                excerpt={a.data.excerpt}
+                image={a.data.hero}
+              />
+            ))}
+          </div>
+        )}
+        {magazineList.length > 0 && (
+          <div class="border-t pt-8 space-y-6" style="border-color:var(--color-divider)">
+            {magazineList.map((a) => (
+              <a
+                href={`/blog/${a.data.slug ?? a.id.replace(/\.md$/, "")}/`}
+                class="flex flex-col md:flex-row gap-6 group no-underline"
+                style="color:var(--color-fg)"
+              >
+                {a.data.hero && (
+                  <div class="md:w-48 shrink-0 aspect-[4/3] overflow-hidden">
+                    <img src={a.data.hero} alt={a.data.title} class="w-full h-full object-cover transition-transform group-hover:scale-105" loading="lazy" />
+                  </div>
+                )}
+                <div>
+                  {a.data.category && <p class="text-xs uppercase tracking-wider mb-2" style="color:var(--color-accent)">{a.data.category}</p>}
+                  <h3 class="font-bold text-xl mb-2" style="font-family:var(--font-display)">{a.data.title}</h3>
+                  {a.data.excerpt && <p class="text-sm leading-relaxed" style="color:var(--color-muted)">{a.data.excerpt}</p>}
+                </div>
+              </a>
+            ))}
+          </div>
+        )}
+      </>
+    ) : (
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         {sorted.map((a, i) => (
           <ArticleCard
@@ -50,10 +104,6 @@ const sorted = allArticoli.sort(
           />
         ))}
       </div>
-    ) : (
-      <p style="color:var(--color-muted)">
-        Nessun articolo pubblicato. Aggiungi file Markdown in <code>src/content/articoli/</code>.
-      </p>
     )}
   </div>
 </BaseLayout>

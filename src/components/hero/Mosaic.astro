@@ -1,0 +1,77 @@
+---
+import config from "../../site.config";
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  lead?: string;
+  ctaPrimary?: { label: string; href: string };
+  ctaSecondary?: { label: string; href: string };
+}
+
+const { title, subtitle, lead, ctaPrimary, ctaSecondary } = Astro.props;
+const tiles = (config.layout?.heroAssets?.mosaic ?? []).slice(0, 4);
+const fallback = config.layout?.heroAssets?.image;
+---
+
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+  <div class="max-w-3xl mb-12">
+    {subtitle && (
+      <p
+        class="text-xs font-medium uppercase tracking-[0.3em] mb-6"
+        style="color:var(--color-accent)"
+      >
+        {subtitle}
+      </p>
+    )}
+    <h1
+      class="font-bold leading-[1.05] mb-8"
+      style="font-family:var(--font-display);font-size:clamp(2.5rem,6vw,5rem);color:var(--color-fg)"
+    >
+      {title}
+    </h1>
+    {lead && (
+      <p class="text-lg leading-relaxed mb-8" style="color:var(--color-muted)">{lead}</p>
+    )}
+    {(ctaPrimary || ctaSecondary) && (
+      <div class="flex flex-wrap gap-4">
+        {ctaPrimary && (
+          <a
+            href={ctaPrimary.href}
+            class="inline-block px-7 py-3 text-sm font-semibold uppercase tracking-wider no-underline"
+            style="background:var(--color-accent);color:var(--color-bg)"
+          >
+            {ctaPrimary.label}
+          </a>
+        )}
+        {ctaSecondary && (
+          <a
+            href={ctaSecondary.href}
+            class="inline-block px-7 py-3 text-sm font-semibold uppercase tracking-wider no-underline border-2"
+            style="color:var(--color-fg);border-color:var(--color-fg)"
+          >
+            {ctaSecondary.label}
+          </a>
+        )}
+      </div>
+    )}
+  </div>
+
+  {(tiles.length > 0 || fallback) && (
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+      {(tiles.length > 0 ? tiles : [fallback, fallback, fallback, fallback].filter(Boolean) as string[]).map((src, i) => (
+        <div
+          class="overflow-hidden"
+          style={`aspect-ratio: ${i % 3 === 0 ? "3/4" : "4/5"};`}
+        >
+          <img
+            src={src}
+            alt=""
+            class="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+            loading={i < 2 ? "eager" : "lazy"}
+          />
+        </div>
+      ))}
+    </div>
+  )}
+</section>

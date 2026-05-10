@@ -1,0 +1,40 @@
+---
+import config from "../../site.config";
+const heroImg = config.layout?.heroAssets?.image;
+---
+
+<section class="py-24" style="background:var(--color-bg)">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
+    <div class="order-2 md:order-1">
+      <p class="text-xs font-medium uppercase tracking-widest mb-4" style="color:var(--color-accent)">La nostra storia</p>
+      <h2
+        class="font-bold text-3xl md:text-4xl mb-6 leading-tight"
+        style="font-family:var(--font-display);color:var(--color-fg)"
+      >
+        {config.name}
+      </h2>
+      <p class="text-base leading-relaxed mb-8" style="color:var(--color-muted)">
+        {config.description}
+      </p>
+      {config.pages.chiSiamo && (
+        <a
+          href="/chi-siamo"
+          class="inline-block px-7 py-3 text-sm font-semibold uppercase tracking-wider no-underline border-2"
+          style="color:var(--color-fg);border-color:var(--color-fg)"
+        >
+          Scopri di più
+        </a>
+      )}
+    </div>
+    {heroImg && (
+      <div class="order-1 md:order-2 aspect-[4/5] overflow-hidden">
+        <img
+          src={heroImg}
+          alt={config.name}
+          class="w-full h-full object-cover"
+          loading="lazy"
+        />
+      </div>
+    )}
+  </div>
+</section>

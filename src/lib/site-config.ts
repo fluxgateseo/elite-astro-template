@@ -92,8 +92,66 @@ export interface SiteConfig {
   seo: {
     defaultOgImage?: string;
   };
+
+  // Layout — homepage hero variant + composable sections + category-page layout
+  layout?: {
+    hero: HeroVariant;
+    sections: SectionId[];
+    categoryLayout: CategoryLayout;
+    heroAssets?: {
+      image?: string;
+      mosaic?: string[];
+      carousel?: string[];
+      video?: string;
+    };
+  };
 }
 
+export type HeroVariant =
+  | "hero-fullbleed"
+  | "hero-split"
+  | "hero-carousel"
+  | "hero-mosaic"
+  | "hero-video"
+  | "hero-form";
+
+export type SectionId =
+  | "section-featured-dishes"
+  | "section-photo-mosaic"
+  | "section-story"
+  | "section-stats"
+  | "section-press"
+  | "section-testimonials"
+  | "section-map-hours"
+  | "section-blog-feed"
+  | "section-cta-banner"
+  | "section-newsletter"
+  | "section-awards"
+  | "section-events-strip";
+
+export type CategoryLayout =
+  | "cat-grid-cards"
+  | "cat-list-thumb"
+  | "cat-magazine"
+  | "cat-filtered"
+  | "cat-map"
+  | "cat-pinterest";
+
+export const DEFAULT_LAYOUT = {
+  hero: "hero-fullbleed" as HeroVariant,
+  sections: [
+    "section-featured-dishes",
+    "section-story",
+    "section-photo-mosaic",
+    "section-blog-feed",
+    "section-cta-banner",
+  ] as SectionId[],
+  categoryLayout: "cat-grid-cards" as CategoryLayout,
+};
+
 export function defineSiteConfig(config: SiteConfig): SiteConfig {
-  return config;
+  return {
+    ...config,
+    layout: config.layout ?? { ...DEFAULT_LAYOUT, heroAssets: {} },
+  };
 }
