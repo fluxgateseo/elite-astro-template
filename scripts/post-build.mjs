@@ -51,6 +51,17 @@ if (!host || host === "demo.example") {
     `/*/index        /:splat/  301`,
     ``,
   ].join("\n");
-  writeFileSync(resolve(root, "dist/_redirects"), redirects);
+  // Per-site extras: if `extra-redirects.txt` exists in project root, append it.
+  // Format is the same as _redirects (Netlify-style). One redirect per line.
+  const extraPath = resolve(root, "extra-redirects.txt");
+  let extraBlock = "";
+  if (existsSync(extraPath)) {
+    const extra = readFileSync(extraPath, "utf8").trim();
+    if (extra) {
+      extraBlock = `\n# Site-specific redirects (from extra-redirects.txt)\n${extra}\n`;
+      console.log(`✓ post-build: appended ${extra.split("\n").length} extra redirect line(s)`);
+    }
+  }
+  writeFileSync(resolve(root, "dist/_redirects"), redirects + extraBlock);
   console.log(`✓ post-build: wrote dist/_redirects with canonical rules for ${host}`);
 }
