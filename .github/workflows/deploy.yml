@@ -3,6 +3,7 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -18,3 +19,15 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm run build
       - run: pnpm tsc --noEmit
+      # Deploy to Cloudflare Pages on push to main, only when the pipeline has
+      # already created the Pages project and populated the repo variable.
+      # During Stage 5a (template generate) the variable is unset, so this step
+      # is skipped; once Stage 6 sets it, the next push (Stage 5b overlay)
+      # triggers the actual deploy.
+      - name: Deploy to Cloudflare Pages
+        if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.PAGES_PROJECT_NAME != ''
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          command: pages deploy dist --project-name=${{ vars.PAGES_PROJECT_NAME }} --branch=main --commit-dirty=true
