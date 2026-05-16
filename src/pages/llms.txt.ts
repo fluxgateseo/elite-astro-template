@@ -19,16 +19,18 @@ export const GET: APIRoute = async () => {
     lines.push(config.description.split("\n")[0].trim());
   }
 
-  const corePages: { label: string; path: string; enabled: boolean | undefined; desc: string }[] = [
+  const serviziMenuEnabled = !!config.pages?.serviziMenu?.enabled;
+  const serviziMenuLabel = config.pages?.serviziMenu?.label ?? "Menu / Servizi";
+  const corePages: { label: string; path: string; enabled: boolean; desc: string }[] = [
     { label: "Home", path: "/", enabled: true, desc: `Homepage di ${config.name}` },
-    { label: "Chi siamo", path: "/chi-siamo/", enabled: config.pages?.chiSiamo, desc: "Storia e missione" },
-    { label: "Menu / Servizi", path: "/menu/", enabled: config.pages?.serviziMenu ?? config.pages?.menu, desc: "Offerta e listino" },
-    { label: "Galleria", path: "/galleria/", enabled: config.pages?.galleria, desc: "Foto del locale e dei piatti" },
-    { label: "Eventi", path: "/eventi/", enabled: config.pages?.eventi, desc: "Eventi privati e ricorrenze" },
-    { label: "FAQ", path: "/faq/", enabled: config.pages?.faq, desc: "Domande frequenti" },
-    { label: "Contatti", path: "/contatti/", enabled: config.pages?.contatti, desc: `Telefono, email, indirizzo` },
+    { label: "Chi siamo", path: "/chi-siamo/", enabled: !!config.pages?.chiSiamo, desc: "Storia e missione" },
+    { label: serviziMenuLabel, path: "/menu/", enabled: serviziMenuEnabled, desc: "Offerta e listino" },
+    { label: "Galleria", path: "/galleria/", enabled: !!config.pages?.galleria, desc: "Foto del locale e dei piatti" },
+    { label: "Eventi", path: "/eventi/", enabled: !!config.pages?.eventi, desc: "Eventi privati e ricorrenze" },
+    { label: "FAQ", path: "/faq/", enabled: !!config.pages?.faq, desc: "Domande frequenti" },
+    { label: "Contatti", path: "/contatti/", enabled: !!config.pages?.contatti, desc: `Telefono, email, indirizzo` },
   ];
-  const enabledCore = corePages.filter((p) => p.enabled !== false);
+  const enabledCore = corePages.filter((p) => p.enabled);
   if (enabledCore.length > 0) {
     lines.push("");
     lines.push("## Pagine principali");
