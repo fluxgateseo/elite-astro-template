@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css";
+import "../styles/skills.css";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import CookieBanner from "../components/CookieBanner.astro";
@@ -69,6 +70,7 @@ const darkModeClass =
 <html
   lang={config.language}
   data-style={config.design.style}
+  data-skill={config.design.skill ?? undefined}
   class={darkModeClass}
 >
 <head>

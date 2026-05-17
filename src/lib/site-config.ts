@@ -54,6 +54,11 @@ export interface SiteConfig {
       body: string;
     };
     darkMode: "auto" | "always" | "never";
+    // Optional design "skill" — picked in the wizard. Surfaces in the template
+    // as `data-skill="<value>"` on <html>, so CSS rules in skills.css can
+    // theme the whole document accordingly. Each value maps to a distinct
+    // visual language sourced from community design skills.
+    skill?: "minimalist" | "brutalist" | "soft-premium" | "emil-eng" | null;
   };
 
   // Brand voice
