@@ -1,19 +1,23 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import config from "../site.config";
+import galleryData from "../data/gallery.json";
 
 if (!config.pages.galleria) {
   return Astro.redirect("/");
 }
 
-// Placeholder: pipeline injects real images via src/data/gallery.ts or similar
 interface GalleryImage {
   src: string;
   alt: string;
-  caption: string;
+  caption?: string;
 }
 
-const images: GalleryImage[] = [];
+const images: GalleryImage[] = (galleryData as GalleryImage[]).map((g) => ({
+  src: g.src,
+  alt: g.alt,
+  caption: g.caption ?? g.alt,
+}));
 ---
 <BaseLayout
   title="Galleria"

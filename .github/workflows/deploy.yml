@@ -4,25 +4,27 @@ on:
     branches: [main]
   pull_request:
   workflow_dispatch:
+
+permissions:
+  contents: read
+  deployments: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          cache: pnpm
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm run build
-      - run: pnpm tsc --noEmit
+          node-version-file: .nvmrc
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - run: npx tsc --noEmit
       # Deploy to Cloudflare Pages on push to main, only when the pipeline has
       # already created the Pages project and populated the repo variable.
       # During Stage 5a (template generate) the variable is unset, so this step
-      # is skipped; once Stage 6 sets it, the next push (Stage 5b overlay)
+      # is skipped; once Stage 6c sets it, the next push (Stage 5b overlay)
       # triggers the actual deploy.
       - name: Deploy to Cloudflare Pages
         if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main' && vars.PAGES_PROJECT_NAME != ''
