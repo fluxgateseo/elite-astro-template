@@ -46,6 +46,25 @@ const primary = config.design.palette.primary;
 const accent = config.design.palette.accent;
 const background = config.design.palette.background;
 
+// Derive text colours from the chosen background so contrast is always safe.
+// The palette only defines primary/accent/background; theme.css carries a
+// `.dark` block that flips --color-fg to near-white. Because we pin --color-bg
+// to the (usually light) palette background, an OS dark-mode preference used to
+// leave near-white text on a white background — an invisible hero title. Pin
+// the whole fg/muted/divider set here, consistent with the background luminance.
+function isLightHex(hex: string): boolean {
+  const m = (hex || "").replace("#", "");
+  if (m.length < 6) return true;
+  const r = parseInt(m.slice(0, 2), 16);
+  const g = parseInt(m.slice(2, 4), 16);
+  const b = parseInt(m.slice(4, 6), 16);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b > 140;
+}
+const bgLight = isLightHex(background);
+const fg = bgLight ? "#18181b" : "#fafafa";
+const muted = bgLight ? "#52525b" : "#a1a1aa";
+const divider = bgLight ? "#e4e4e7" : "#27272a";
+
 const navItems: { href: string; label: string }[] = [
   ...(config.pages.chiSiamo ? [{ href: "/chi-siamo", label: "Chi Siamo" }] : []),
   ...(config.pages.serviziMenu?.enabled
@@ -87,11 +106,17 @@ const darkModeClass =
   <link rel="stylesheet" href={googleFontsUrl} />
 
   <!-- Dynamic palette -->
-  <style define:vars={{ primary, accent, background }}>
-    :root {
+  <style define:vars={{ primary, accent, background, fg, muted, divider }}>
+    /* `:root, :root.dark` so these win over theme.css's `.dark` overrides
+       regardless of source order — the design is palette-driven, not OS-driven. */
+    :root,
+    :root.dark {
       --color-primary: var(--primary);
       --color-accent: var(--accent);
       --color-bg: var(--background);
+      --color-fg: var(--fg);
+      --color-muted: var(--muted);
+      --color-divider: var(--divider);
       --font-display: v-display;
       --font-body: v-body;
     }
