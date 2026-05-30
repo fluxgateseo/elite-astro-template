@@ -13,7 +13,10 @@ const { title, subtitle, lead, ctaPrimary, ctaSecondary } = Astro.props;
 const heroImg = config.layout?.heroAssets?.image ?? config.seo?.defaultOgImage ?? "";
 ---
 
-<section class="relative min-h-[78vh] flex items-center overflow-hidden">
+<section
+  class="relative min-h-[78vh] flex items-center overflow-hidden"
+  style={heroImg ? "" : "background:var(--color-accent)"}
+>
   {heroImg && (
     <img
       src={heroImg}
@@ -23,7 +26,13 @@ const heroImg = config.layout?.heroAssets?.image ?? config.seo?.defaultOgImage ?
       fetchpriority="high"
     />
   )}
-  <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(0,0,0,0.35) 0%,rgba(0,0,0,0.75) 100%)"></div>
+  {/* Dark gradient only over a real image. Without an image the section uses
+      a solid brand colour (accent) so the white text always has contrast —
+      previously the gradient sat over the white page and the white title was
+      nearly invisible. */}
+  {heroImg && (
+    <div class="absolute inset-0" style="background:linear-gradient(180deg,rgba(0,0,0,0.35) 0%,rgba(0,0,0,0.75) 100%)"></div>
+  )}
   <div class="relative max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-32 text-white">
     {subtitle && (
       <p class="text-xs font-medium uppercase tracking-[0.3em] mb-8 opacity-90">{subtitle}</p>
@@ -43,7 +52,7 @@ const heroImg = config.layout?.heroAssets?.image ?? config.seo?.defaultOgImage ?
           <a
             href={ctaPrimary.href}
             class="inline-block px-8 py-3.5 text-sm font-semibold uppercase tracking-wider no-underline"
-            style="background:var(--color-accent);color:var(--color-bg)"
+            style={heroImg ? "background:var(--color-accent);color:var(--color-bg)" : "background:#ffffff;color:var(--color-accent)"}
           >
             {ctaPrimary.label}
           </a>
