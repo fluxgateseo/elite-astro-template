@@ -43,7 +43,7 @@ export interface SiteConfig {
 
   // Visual style
   design: {
-    style: "editorial" | "modern" | "elegant" | "bold";
+    style: "editorial" | "modern" | "elegant" | "bold" | "seed";
     palette: {
       primary: string;
       accent: string;
