@@ -3,14 +3,20 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import HeroDispatcher from "../components/hero/index.astro";
 import SectionsDispatcher from "../components/sections/index.astro";
 import config from "../site.config";
+
+// Two-string i18n so the hero CTAs render in the site's language instead
+// of always Italian.
+const isEn = (config.language ?? "it").toLowerCase().startsWith("en");
+const contactLabel = isEn ? "Contact us" : "Contattaci";
+const blogLabel = isEn ? "Read the blog" : "Leggi il blog";
 ---
 <BaseLayout description={config.description}>
   <HeroDispatcher
     title={config.name}
     subtitle={config.tagline}
     lead={config.description}
-    ctaPrimary={config.pages.contatti ? { label: "Contattaci", href: "/contatti" } : undefined}
-    ctaSecondary={config.pages.blog ? { label: "Leggi il blog", href: "/blog" } : undefined}
+    ctaPrimary={config.pages.contatti ? { label: contactLabel, href: "/contatti" } : undefined}
+    ctaSecondary={config.pages.blog ? { label: blogLabel, href: "/blog" } : undefined}
   />
   <SectionsDispatcher />
 </BaseLayout>

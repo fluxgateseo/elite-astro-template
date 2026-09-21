@@ -1,38 +1,36 @@
 ---
+/**
+ * Testimonials.astro — renders ONLY when the site config has real
+ * `testimonials` provided by the operator. Previous versions shipped
+ * hardcoded fake reviews per industry (Marco T., Giulia M., Luca R.
+ * etc.) that appeared on every generated site regardless of whether
+ * any real testimonials existed. That is anti-slop rule #1: never
+ * invent testimonials.
+ *
+ * To render this section, add `testimonials: [{quote, author, role?}]`
+ * to site.config.ts. Missing → the section returns null and the page
+ * layout collapses around it.
+ */
 import config from "../../site.config";
 
 interface Testimonial { quote: string; author: string; role?: string }
+const testimonials: Testimonial[] = (config as { testimonials?: Testimonial[] }).testimonials ?? [];
+if (testimonials.length === 0) return null;
 
-const industryTestimonials: Record<string, Testimonial[]> = {
-  ristorazione: [
-    { quote: "Una delle migliori esperienze gastronomiche dell'anno. Ogni piatto racconta una storia.", author: "Marco T.", role: "Cliente abituale" },
-    { quote: "Atmosfera unica, servizio impeccabile. Tornerò sicuramente per il prossimo anniversario.", author: "Giulia M.", role: "Su Tripadvisor" },
-    { quote: "La cucina rispetta la tradizione ma con un tocco contemporaneo che fa la differenza.", author: "Luca R.", role: "Su Google Reviews" },
-  ],
-  beauty: [
-    { quote: "Professionalità e cura del dettaglio. Mi sento sempre a casa.", author: "Anna B.", role: "Cliente abituale" },
-    { quote: "Risultati eccellenti e ambiente rilassante. Lo consiglio a chiunque.", author: "Sara L.", role: "Su Google Reviews" },
-    { quote: "Personale preparato e gentile, prodotti di alta qualità.", author: "Martina F.", role: "Su Treatwell" },
-  ],
-  default: [
-    { quote: "Servizio di altissimo livello, sempre disponibili e attenti ai dettagli.", author: "Cliente verificato", role: "Recensione recente" },
-    { quote: "Esperienza professionale e curata. Risultati superiori alle aspettative.", author: "Cliente verificato", role: "Recensione recente" },
-    { quote: "Consiglio vivamente. Hanno saputo capire esattamente quello di cui avevo bisogno.", author: "Cliente verificato", role: "Recensione recente" },
-  ],
-};
-
-const testimonials = industryTestimonials[config.industry] ?? industryTestimonials.default;
+const lang = (config.language ?? "it").toLowerCase();
+const eyebrow = lang.startsWith("en") ? "What people say about us" : "Cosa dicono di noi";
+const heading = lang.startsWith("en") ? "Testimonials" : "Testimonianze";
 ---
 
 <section class="py-24" style="background:var(--color-bg)">
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="text-center mb-16">
-      <p class="text-xs font-medium uppercase tracking-widest mb-3" style="color:var(--color-accent)">Cosa dicono di noi</p>
+      <p class="text-xs font-medium uppercase tracking-widest mb-3" style="color:var(--color-accent)">{eyebrow}</p>
       <h2
         class="font-bold text-3xl md:text-4xl"
         style="font-family:var(--font-display);color:var(--color-fg)"
       >
-        Testimonianze
+        {heading}
       </h2>
     </div>
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10">

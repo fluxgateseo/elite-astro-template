@@ -36,8 +36,12 @@ const canonicalUrl = canonical ?? buildCanonical(Astro.url.pathname);
 const displayFont = config.design.fontPairing.display;
 const bodyFont = config.design.fontPairing.body;
 const uniqueFonts = [...new Set([displayFont, bodyFont])];
+// Load a wider weight range (300, 400, 500, 600, 700) so styles that use
+// whisper-light headlines (e.g. Seed at 300/350) or medium-weight body
+// (e.g. buttons at 500) render as designed. 350 isn't a real Google Fonts
+// axis stop — variable fonts interpolate, others fall back to nearest.
 const fontsParam = uniqueFonts
-  .map((f) => `family=${encodeURIComponent(f)}:ital,wght@0,400;0,600;0,700;1,400`)
+  .map((f) => `family=${encodeURIComponent(f)}:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400`)
   .join("&");
 const googleFontsUrl = `https://fonts.googleapis.com/css2?${fontsParam}&display=swap`;
 

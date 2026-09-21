@@ -78,3 +78,195 @@
   letter-spacing: 0.04em;
   font-weight: 600;
 }
+
+/* ── Seed — botanical-clinical, editorial-scientific ─────────────────── */
+/* Whisper-light headline weights (300–350), pill-shaped buttons (radius
+   1000px), no shadows, no gradients, monochromatic + one vivid accent.
+   Palette (primary / accent / background) is set per-site from
+   site.config.ts — the seed style enforces the STRUCTURE, not the colors. */
+[data-style="seed"] {
+  --content-max: 1200px;
+  --font-display: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  /* Snow-white background (warm off-white, never pure #fff) is set via
+     palette.background on the site config; this fallback keeps the vibe
+     if the palette gets reset. */
+  --color-muted: #666666;   /* Pewter — secondary text */
+  --color-divider: #eeeee9; /* Warm Stone — subtle bands */
+  --radius-button: 1000px;
+  --radius-badge: 1000px;
+  --radius-card: 16px;
+  --radius-card-lg: 32px;
+  --radius-input: 8px;
+  --tracking-display: -0.72px;
+  --tracking-heading-lg: -0.4px;
+  --tracking-subheading: -0.48px;
+  --tracking-body: -0.18px;
+}
+
+/* Enable OpenType stylistic set ss05 across the whole page (Inter supports
+   it; falls back gracefully on system UI). Signature Seed typographic move. */
+[data-style="seed"] body {
+  font-family: var(--font-body);
+  font-feature-settings: "ss05" on;
+  color: var(--color-fg);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Whisper-light display headings — the single most distinctive Seed move.
+   400–500 stays reserved for body, buttons, labels. */
+[data-style="seed"] h1 {
+  font-family: var(--font-display);
+  font-weight: 350;
+  font-size: clamp(2rem, 5vw, 3rem); /* 32-48px */
+  line-height: 1.1;
+  letter-spacing: -0.72px;
+  color: var(--color-primary);
+}
+
+[data-style="seed"] h2 {
+  font-family: var(--font-display);
+  font-weight: 350;
+  font-size: clamp(1.75rem, 3.5vw, 2.5rem); /* 28-40px */
+  line-height: 1.1;
+  letter-spacing: -0.4px;
+  color: var(--color-primary);
+}
+
+[data-style="seed"] h3 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 1.5rem; /* 24px */
+  line-height: 1.2;
+  letter-spacing: -0.48px;
+  color: var(--color-primary);
+}
+
+/* Body text — one tier below primary via muted for de-emphasis lines. */
+[data-style="seed"] p,
+[data-style="seed"] li {
+  font-weight: 400;
+  font-size: 1rem; /* 16px */
+  line-height: 1.5;
+}
+
+/* Pill-shaped buttons — non-negotiable in Seed. No shadow, no gradient. */
+[data-style="seed"] .btn,
+[data-style="seed"] button:not([data-unstyled]),
+[data-style="seed"] a.btn,
+[data-style="seed"] .cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 16px 24px;
+  border-radius: var(--radius-button);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1;
+  border: none;
+  box-shadow: none;
+  background: var(--color-primary);
+  color: var(--color-bg);
+  transition: opacity 0.15s ease-out;
+}
+
+[data-style="seed"] .btn:hover,
+[data-style="seed"] button:not([data-unstyled]):hover,
+[data-style="seed"] a.btn:hover,
+[data-style="seed"] .cta:hover {
+  opacity: 0.85;
+}
+
+/* Ghost button — dark surfaces or over imagery. */
+[data-style="seed"] .btn-ghost {
+  background: transparent;
+  border: 1.5px solid var(--color-bg);
+  color: var(--color-bg);
+}
+
+/* Inverted button — light surface, dark border + text. */
+[data-style="seed"] .btn-outline {
+  background: var(--color-bg);
+  border: 1.5px solid var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* Cards — 16px radius, no shadow, no border. Rely on background contrast. */
+[data-style="seed"] .card,
+[data-style="seed"] .article-card,
+[data-style="seed"] .feature-card {
+  border-radius: var(--radius-card);
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+
+/* Large hero-style cards / feature blocks. */
+[data-style="seed"] .card-lg {
+  border-radius: var(--radius-card-lg);
+}
+
+/* Badges & pills — the one place Lime-Pulse-style accents live. */
+[data-style="seed"] .badge,
+[data-style="seed"] .pill {
+  display: inline-block;
+  padding: 6px 8px;
+  border-radius: var(--radius-badge);
+  font-size: 0.75rem; /* 12px */
+  font-weight: 500;
+  line-height: 1;
+  background: var(--color-accent);
+  color: var(--color-primary);
+}
+
+/* Inputs — 8px radius, thin borders, transparent bg. */
+[data-style="seed"] input,
+[data-style="seed"] textarea,
+[data-style="seed"] select {
+  border-radius: var(--radius-input);
+  border: 1.5px solid var(--color-primary);
+  background: transparent;
+  padding: 14px 20px;
+  font-family: var(--font-body);
+  font-weight: 400;
+  color: var(--color-primary);
+  box-shadow: none;
+}
+
+/* Dark section — full-bleed band flipping to primary. Used for callouts. */
+[data-style="seed"] .dark-section {
+  background: var(--color-primary);
+  color: var(--color-bg);
+}
+
+[data-style="seed"] .dark-section h1,
+[data-style="seed"] .dark-section h2,
+[data-style="seed"] .dark-section h3,
+[data-style="seed"] .dark-section p {
+  color: var(--color-bg);
+}
+
+[data-style="seed"] .dark-section .btn {
+  background: var(--color-bg);
+  color: var(--color-primary);
+}
+
+/* Kill drop shadows across the whole preset. Signature no-elevation move. */
+[data-style="seed"] * {
+  box-shadow: none !important;
+}
+
+/* Section rhythm — generous editorial breathing room. */
+[data-style="seed"] section {
+  padding-top: 64px;
+  padding-bottom: 64px;
+}
+
+@media (min-width: 768px) {
+  [data-style="seed"] section {
+    padding-top: 96px;
+    padding-bottom: 96px;
+  }
+}
