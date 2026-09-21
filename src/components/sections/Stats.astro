@@ -1,36 +1,22 @@
 ---
+/**
+ * Stats.astro — renders ONLY when the site config has real `stats`
+ * provided by the operator. Previous versions shipped hardcoded fake
+ * metrics per industry ("★ 4.7 · Recensioni clienti", "20+ Anni di
+ * tradizione", "100% Materie prime selezionate", "7/7 Aperti tutta la
+ * settimana") that appeared on every generated site regardless of
+ * whether they were true. That is anti-slop rule #2: never invent
+ * numbers.
+ *
+ * To render this section, add `stats: [{value, label}]` to
+ * site.config.ts. Missing → the section returns null and the page
+ * layout collapses around it.
+ */
 import config from "../../site.config";
 
 interface StatItem { value: string; label: string }
-
-const industryStats: Record<string, StatItem[]> = {
-  ristorazione: [
-    { value: "★ 4.7", label: "Recensioni clienti" },
-    { value: "20+", label: "Anni di tradizione" },
-    { value: "100%", label: "Materie prime selezionate" },
-    { value: "7/7", label: "Aperti tutta la settimana" },
-  ],
-  beauty: [
-    { value: "★ 4.9", label: "Recensioni clienti" },
-    { value: "10+", label: "Anni di esperienza" },
-    { value: "100%", label: "Prodotti professionali" },
-    { value: "6/7", label: "Giorni a settimana" },
-  ],
-  servizi: [
-    { value: "★ 4.8", label: "Recensioni clienti" },
-    { value: "15+", label: "Anni di attività" },
-    { value: "200+", label: "Progetti completati" },
-    { value: "24h", label: "Tempo di risposta" },
-  ],
-  default: [
-    { value: "★ 4.8", label: "Recensioni clienti" },
-    { value: "10+", label: "Anni di esperienza" },
-    { value: "100%", label: "Qualità garantita" },
-    { value: "7/7", label: "Sempre disponibili" },
-  ],
-};
-
-const stats = industryStats[config.industry] ?? industryStats.default;
+const stats: StatItem[] = (config as { stats?: StatItem[] }).stats ?? [];
+if (stats.length === 0) return null;
 ---
 
 <section class="py-20" style="background:var(--color-fg);color:var(--color-bg)">

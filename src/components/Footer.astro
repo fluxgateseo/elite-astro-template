@@ -8,6 +8,20 @@ interface Props {
 const { navItems } = Astro.props;
 const year = new Date().getFullYear();
 
+// Language switch — the site was shipping "Sezioni", "Contatti", "Tutti i
+// diritti riservati", "Mappa del sito" hardcoded in Italian regardless of
+// config.language. Now driven by a two-key i18n map. Add more languages by
+// widening the switch below or plugging in a real i18n loader.
+const lang = (config.language ?? "it").toLowerCase();
+const isEn = lang.startsWith("en");
+const t = {
+  sections: isEn ? "Sections" : "Sezioni",
+  contact: isEn ? "Contact" : "Contatti",
+  rightsReserved: isEn ? "All rights reserved." : "Tutti i diritti riservati.",
+  sitemap: isEn ? "Sitemap" : "Mappa del sito",
+  privacyLink: isEn ? "Privacy & Cookies" : "Privacy & Cookie",
+};
+
 // Social links map
 const socialLinks = [
   { key: "instagram", label: "Instagram", href: config.social?.instagram },
@@ -59,9 +73,9 @@ const socialLinks = [
           class="text-xs font-medium uppercase tracking-widest mb-4"
           style="color:var(--color-muted)"
         >
-          Sezioni
+          {t.sections}
         </p>
-        <nav class="flex flex-col gap-2" aria-label="Mappa del sito">
+        <nav class="flex flex-col gap-2" aria-label={t.sitemap}>
           {navItems.map(({ label, href }) => (
             <a
               href={href}
@@ -80,7 +94,7 @@ const socialLinks = [
           class="text-xs font-medium uppercase tracking-widest mb-4"
           style="color:var(--color-muted)"
         >
-          Contatti
+          {t.contact}
         </p>
         <address class="not-italic text-sm space-y-1 leading-relaxed" style="color:var(--color-muted)">
           <p>{config.address.street}</p>
@@ -111,7 +125,7 @@ const socialLinks = [
       class="border-t mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs"
       style="border-color:var(--color-divider);color:var(--color-muted)"
     >
-      <p>&copy; {year} {config.name}. Tutti i diritti riservati.</p>
+      <p>&copy; {year} {config.name}. {t.rightsReserved}</p>
       <p>
         <a
           href="/faq#privacy"
